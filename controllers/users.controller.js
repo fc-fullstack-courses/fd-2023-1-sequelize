@@ -14,7 +14,7 @@ module.exports.createUser = async (req, res, next) => {
 
 module.exports.getUsers = async (req, res, next) => {
   try {
-    
+
     // SELECT * FROM users;
     const users = await User.findAll();
 
@@ -41,3 +41,29 @@ module.exports.getUsers = async (req, res, next) => {
   }
 }
 
+module.exports.getUser = async (req, res, next) => {
+  try {
+    const { params: { userId } } = req;
+
+    // SELECT * FROM users WHERE id = userId;
+    // const [user] = await User.findAll({
+    //   where: {
+    //   id: userId,
+    //  }
+    // });
+
+    // SELECT * FROM users WHERE id = userId;
+    // const user = await User.findOne({
+    //   where: {
+    //     id: userId,
+    //   }
+    // });
+    
+    // SELECT * FROM users WHERE id = userId;
+    const user = await User.findByPk(userId);
+
+    res.send(user);
+  } catch (error) {
+    next(error)
+  }
+}
