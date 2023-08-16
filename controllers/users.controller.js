@@ -1,4 +1,4 @@
-const { User } = require('../models');
+const { User, Sequelize: { Op } } = require('../models');
 
 module.exports.createUser = async (req, res, next) => {
   try {
@@ -16,7 +16,7 @@ module.exports.getUsers = async (req, res, next) => {
   try {
 
     // SELECT * FROM users;
-    const users = await User.findAll();
+    // const users = await User.findAll();
 
     // SELECT fullName, isMale FROM users;
     // const users = await User.findAll({
@@ -28,12 +28,29 @@ module.exports.getUsers = async (req, res, next) => {
     //   attributes: ['fullName', ['bonus_amount', 'money']]
     // });
 
-    // SELECT id, fullName, email, isMale, ... as money FROM users;
+    // SELECT id, fullName, email, isMale, ... as money FROM users
+    // WHERE isMale = false OR id = 1;
     // const users = await User.findAll({
     //   attributes: {
     //     exclude: ['password']
+    //   },
+    //   where: {
+    //     [Op.or]: [{ isMale: false }, { id: 1 }]
     //   }
     // });
+
+    // SELECT id, fullName, email, isMale, ... as money FROM users
+    // WHERE id < 5;
+    const users = await User.findAll({
+      attributes: {
+        exclude: ['password']
+      },
+      where: {
+        id : {
+          [Op.lt]: 5
+        }
+      }
+    });
 
     res.send(users);
   } catch (error) {
@@ -58,7 +75,7 @@ module.exports.getUser = async (req, res, next) => {
     //     id: userId,
     //   }
     // });
-    
+
     // SELECT * FROM users WHERE id = userId;
     const user = await User.findByPk(userId);
 
