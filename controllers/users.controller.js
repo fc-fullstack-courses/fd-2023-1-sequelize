@@ -117,3 +117,41 @@ module.exports.deleteUserInstance = async (req, res, next) => {
     next(error);
   }
 }
+
+module.exports.updateUser = async (req, res, next) => {
+  try {
+    const {
+      body,
+      params: { userId }
+    } = req;
+
+    // UPDATE users SET ... WHERE id = userId
+    const [updatedRows, [user]] = await User.update(body, {
+      where: {
+        id: userId
+      },
+      returning: true
+    });
+
+    res.send(user);
+  } catch (error) {
+    next(error);
+  }
+}
+
+module.exports.updateUserInstance = async (req, res, next) => {
+  try {
+    const {
+      body,
+      params: { userId }
+    } = req;
+
+    const userInstance = await User.findByPk(userId);
+
+    const updatedUserInstance = await userInstance.update(body);
+
+    res.send(updatedUserInstance);
+  } catch (error) {
+    next(error);
+  }
+}
