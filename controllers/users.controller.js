@@ -6,7 +6,7 @@ module.exports.createUser = async (req, res, next) => {
 
     const user = await User.create(body);
 
-    res.status(201).send(user);
+    res.status(201).send({ data: user });
   } catch (error) {
     next(error);
   }
@@ -52,7 +52,7 @@ module.exports.getUsers = async (req, res, next) => {
       }
     });
 
-    res.send(users);
+    res.send({ data: users });
   } catch (error) {
     next(error);
   }
@@ -79,7 +79,7 @@ module.exports.getUser = async (req, res, next) => {
     // SELECT * FROM users WHERE id = userId;
     const user = await User.findByPk(userId);
 
-    res.send(user);
+    res.send({ data: user });
   } catch (error) {
     next(error)
   }
@@ -98,7 +98,7 @@ module.exports.deleteUser = async (req, res, next) => {
       }
     });
 
-    res.send(userId);
+    res.send({ data: userId });
   } catch (error) {
     next(error);
   }
@@ -112,7 +112,7 @@ module.exports.deleteUserInstance = async (req, res, next) => {
 
     await user.destroy();
 
-    res.send(user);
+    res.send({ data: user });
   } catch (error) {
     next(error);
   }
@@ -133,7 +133,7 @@ module.exports.updateUser = async (req, res, next) => {
       returning: true
     });
 
-    res.send(user);
+    res.send({ data: user });
   } catch (error) {
     next(error);
   }
@@ -150,7 +150,7 @@ module.exports.updateUserInstance = async (req, res, next) => {
 
     const updatedUserInstance = await userInstance.update(body);
 
-    res.send(updatedUserInstance);
+    res.send({ data: updatedUserInstance });
   } catch (error) {
     next(error);
   }
