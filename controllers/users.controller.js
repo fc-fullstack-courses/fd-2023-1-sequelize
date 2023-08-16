@@ -46,7 +46,7 @@ module.exports.getUsers = async (req, res, next) => {
         exclude: ['password']
       },
       where: {
-        id : {
+        id: {
           [Op.lt]: 5
         }
       }
@@ -82,5 +82,38 @@ module.exports.getUser = async (req, res, next) => {
     res.send(user);
   } catch (error) {
     next(error)
+  }
+}
+
+module.exports.deleteUser = async (req, res, next) => {
+  try {
+    const { params: { userId } } = req;
+
+    // const user = await User.findByPk(userId);
+
+    // DELETE FROM users WHERE id = userId;
+    await User.destroy({
+      where: {
+        id: userId
+      }
+    });
+
+    res.send(userId);
+  } catch (error) {
+    next(error);
+  }
+}
+
+module.exports.deleteUserInstance = async (req, res, next) => {
+  try {
+    const { params: { userId } } = req;
+
+    const user = await User.findByPk(userId);
+
+    await user.destroy();
+
+    res.send(user);
+  } catch (error) {
+    next(error);
   }
 }
