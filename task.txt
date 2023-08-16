@@ -1,0 +1,20 @@
+  Написать модель Машина и контролер + роутер для неё
+
+  У неё должны быть свойства:
+    название
+    год выпуска
+    производитель
+    пробег (км)
+    цвет
+    ЯвляетсяЛиЛевоРульной
+    номерной-знак
+
+    npx sequelize --help
+
+    npx sequelize init
+
+    npx sequelize db:create (если нету БД из конфига)
+
+    npx sequelize model:generate --name Имя --attributes attr1:string,attr2:boolean,attrN:string
+
+    npx sequelize db:migrate
