@@ -15,9 +15,12 @@ module.exports.createUser = async (req, res, next) => {
 
 module.exports.getUsers = async (req, res, next) => {
   try {
-
+    const { pagination } = req;
     // SELECT * FROM users;
-    // const users = await User.findAll();
+    const users = await User.findAll({
+      ...pagination,
+      order: [['id', 'ASC'], ['email', 'DESC']]
+    });
 
     // SELECT fullName, isMale FROM users;
     // const users = await User.findAll({
@@ -42,16 +45,16 @@ module.exports.getUsers = async (req, res, next) => {
 
     // SELECT id, fullName, email, isMale, ... as money FROM users
     // WHERE id < 5;
-    const users = await User.findAll({
-      attributes: {
-        exclude: ['password']
-      },
-      where: {
-        id: {
-          [Op.lt]: 5
-        }
-      }
-    });
+    // const users = await User.findAll({
+    //   attributes: {
+    //     exclude: ['password']
+    //   },
+    //   where: {
+    //     id: {
+    //       [Op.lt]: 5
+    //     }
+    //   }
+    // });
 
     res.send({ data: users });
   } catch (error) {

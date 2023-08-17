@@ -1,9 +1,10 @@
 const userRouter = require('express').Router();
 const UserController = require('../controllers/users.controller');
+const { paginate } = require('../middlewares/common.mv');
 const { findUser } = require('../middlewares/users.mv');
 
 userRouter.post('/', UserController.createUser);
-userRouter.get('/', UserController.getUsers);
+userRouter.get('/', paginate, UserController.getUsers);
 
 userRouter.get('/:userId', UserController.getUser);
 userRouter.delete('/:userId', findUser, UserController.deleteUser);
