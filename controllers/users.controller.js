@@ -1,3 +1,4 @@
+const createHttpError = require('http-errors');
 const { User, Sequelize: { Op } } = require('../models');
 
 module.exports.createUser = async (req, res, next) => {
@@ -79,6 +80,10 @@ module.exports.getUser = async (req, res, next) => {
     // SELECT * FROM users WHERE id = userId;
     const user = await User.findByPk(userId);
 
+    if (!user) {
+      return next(createHttpError(404, 'User not found'));
+    }
+
     res.send({ data: user });
   } catch (error) {
     next(error)
@@ -92,11 +97,15 @@ module.exports.deleteUser = async (req, res, next) => {
     // const user = await User.findByPk(userId);
 
     // DELETE FROM users WHERE id = userId;
-    await User.destroy({
+    const deletedCount = await User.destroy({
       where: {
         id: userId
       }
     });
+
+    if (deletedCount !== 1) {
+      return next(createHttpError(404, 'User not found'));
+    }
 
     res.send({ data: userId });
   } catch (error) {
@@ -109,6 +118,10 @@ module.exports.deleteUserInstance = async (req, res, next) => {
     const { params: { userId } } = req;
 
     const user = await User.findByPk(userId);
+
+    if (!user) {
+      return next(createHttpError(404, 'User not found'));
+    }
 
     await user.destroy();
 
@@ -133,6 +146,10 @@ module.exports.updateUser = async (req, res, next) => {
       returning: true
     });
 
+    if (updatedRows !== 1) {
+      return next(createHttpError(404, 'User not found'));
+    }
+
     res.send({ data: user });
   } catch (error) {
     next(error);
@@ -147,6 +164,10 @@ module.exports.updateUserInstance = async (req, res, next) => {
     } = req;
 
     const userInstance = await User.findByPk(userId);
+
+    if (!userInstance) {
+      return next(createHttpError(404, 'User not found'));
+    }
 
     const updatedUserInstance = await userInstance.update(body);
 
