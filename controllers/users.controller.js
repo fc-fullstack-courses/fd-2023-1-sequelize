@@ -92,22 +92,18 @@ module.exports.getUser = async (req, res, next) => {
 
 module.exports.deleteUser = async (req, res, next) => {
   try {
-    const { params: { userId } } = req;
+    const { user: { id }, user } = req;
 
     // const user = await User.findByPk(userId);
 
     // DELETE FROM users WHERE id = userId;
-    const deletedCount = await User.destroy({
+    await User.destroy({
       where: {
-        id: userId
+        id
       }
     });
 
-    if (deletedCount !== 1) {
-      return next(createHttpError(404, 'User not found'));
-    }
-
-    res.send({ data: userId });
+    res.send({ data: user });
   } catch (error) {
     next(error);
   }
@@ -115,13 +111,7 @@ module.exports.deleteUser = async (req, res, next) => {
 
 module.exports.deleteUserInstance = async (req, res, next) => {
   try {
-    const { params: { userId } } = req;
-
-    const user = await User.findByPk(userId);
-
-    if (!user) {
-      return next(createHttpError(404, 'User not found'));
-    }
+    const { user } = req;
 
     await user.destroy();
 
@@ -135,20 +125,16 @@ module.exports.updateUser = async (req, res, next) => {
   try {
     const {
       body,
-      params: { userId }
+      user: { id }
     } = req;
 
     // UPDATE users SET ... WHERE id = userId
     const [updatedRows, [user]] = await User.update(body, {
       where: {
-        id: userId
+        id
       },
       returning: true
     });
-
-    if (updatedRows !== 1) {
-      return next(createHttpError(404, 'User not found'));
-    }
 
     res.send({ data: user });
   } catch (error) {
@@ -160,16 +146,10 @@ module.exports.updateUserInstance = async (req, res, next) => {
   try {
     const {
       body,
-      params: { userId }
+      user
     } = req;
 
-    const userInstance = await User.findByPk(userId);
-
-    if (!userInstance) {
-      return next(createHttpError(404, 'User not found'));
-    }
-
-    const updatedUserInstance = await userInstance.update(body);
+    const updatedUserInstance = await user.update(body);
 
     res.send({ data: updatedUserInstance });
   } catch (error) {
