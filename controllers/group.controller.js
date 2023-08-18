@@ -50,3 +50,34 @@ module.exports.getGroups = async (req, res, next) => {
     next(error);
   }
 }
+
+module.exports.addUserToGroup = async (req, res, next) => {
+  try {
+    const { user, params: { groupId } } = req;
+
+    const group = await Group.findByPk(groupId);
+
+    if (!group) {
+      return next(createHttpError(404, 'Group not found'));
+    }
+
+    await user.addGroup(group);
+
+    const groupWithUsers = await Group.findOne({
+      where: { id: groupId },
+      include: {
+        model: User,
+        attributes: {
+          exclude: ['password']
+        },
+        through: {
+          attributes: []
+        }
+      }
+    });
+
+    res.send({ data: groupWithUsers });
+  } catch (error) {
+    next(error);
+  }
+}
