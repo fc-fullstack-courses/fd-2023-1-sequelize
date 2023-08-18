@@ -87,7 +87,14 @@ module.exports.getUser = async (req, res, next) => {
       return next(createHttpError(404, 'User not found'));
     }
 
-    res.send({ data: user });
+    const groups = await user.getGroups();
+
+    const userWithGroups = {
+      ...user.get(),
+      groups
+    };
+
+    res.send({ data: userWithGroups });
   } catch (error) {
     next(error)
   }
