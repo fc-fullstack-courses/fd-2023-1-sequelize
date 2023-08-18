@@ -2,3 +2,4 @@
 !.gitkeep
 !.gitignore
 node_modules/
+sequelize-*.json
