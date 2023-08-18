@@ -20,3 +20,33 @@ module.exports.createGroup = async (req, res, next) => {
     next(error);
   }
 }
+
+module.exports.getGroups = async (req, res, next) => {
+  try {
+    const { pagination } = req;
+
+    // LEFT JOIN example
+    // const groups = await Group.findAll({
+    //   ...pagination,
+    //   include: User
+    // });
+
+    // INNER JOIN example
+    const groups = await Group.findAll({
+      ...pagination,
+      include: [{
+        model: User,
+        // right: true для RIGHT JOIN
+        required: true,
+        attributes: ['id', 'fullName'],
+        through: {
+          attributes: []
+        }
+      }]
+    });
+
+    res.send({ data: groups });
+  } catch (error) {
+    next(error);
+  }
+}
