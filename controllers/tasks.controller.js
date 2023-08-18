@@ -1,5 +1,5 @@
 const createHttpError = require('http-errors');
-const { Task } = require('../models');
+const { Task } = require('../db/models');
 
 module.exports.createTask = async (req, res, next) => {
   try {

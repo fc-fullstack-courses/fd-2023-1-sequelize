@@ -1,5 +1,5 @@
 const createHttpError = require('http-errors');
-const { User, Sequelize: { Op } } = require('../models');
+const { User, Sequelize: { Op } } = require('../db/models');
 
 module.exports.createUser = async (req, res, next) => {
   try {

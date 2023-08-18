@@ -1,5 +1,6 @@
 .*
 !.gitkeep
 !.gitignore
+!.*rc
 node_modules/
 sequelize-*.json
